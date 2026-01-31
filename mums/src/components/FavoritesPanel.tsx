@@ -41,7 +41,7 @@ export default function FavoritesPanel({
             className="fixed right-4 top-4 z-50 w-[min(440px,calc(100vw-2rem))] overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-xl dark:border-zinc-800 dark:bg-zinc-950"
           >
             <div className="flex items-center justify-between border-b border-zinc-200 p-4 dark:border-zinc-800">
-              <div className="text-base font-semibold tracking-tight">Favoriter</div>
+              <div className="text-lg font-semibold tracking-tight">Favoriter</div>
               <button
                 type="button"
                 onClick={onClose}
