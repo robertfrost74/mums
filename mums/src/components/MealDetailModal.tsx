@@ -136,8 +136,7 @@ export default function MealDetailModal({
               role="dialog"
               aria-modal="true"
             >
-              <div className="flex items-center justify-between border-b border-zinc-200 p-4 dark:border-zinc-800">
-                <div className="text-base font-semibold tracking-tight">Recept</div>
+              <div className="flex items-center justify-end border-b border-zinc-200 p-4 dark:border-zinc-800">
                 <button onClick={onClose} className={actionBtn} type="button">
                   Stäng
                 </button>
