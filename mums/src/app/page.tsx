@@ -9,7 +9,12 @@ import FavoritesPanel from "@/components/FavoritesPanel";
 import { useFavorites } from "@/hooks/useFavorites";
 import type { MealSummary } from "@/lib/types";
 import { buildQuery } from "@/lib/urlState";
-import { filterMealsByCategory, listCategories, randomMeal, searchMealsByName } from "@/lib/themealdb";
+import {
+  filterMealsByCategory,
+  listCategories,
+  randomMeal,
+  searchMealsByName,
+} from "@/lib/themealdb";
 
 type CategoryLite = { strCategory: string };
 
@@ -19,6 +24,7 @@ export default function Page() {
 
   const initialQ = sp.get("q") ?? "";
   const initialCat = sp.get("cat") ?? "";
+  const initialMeal = sp.get("meal") ?? "";
 
   const [query, setQuery] = useState(initialQ);
   const [category, setCategory] = useState(initialCat);
@@ -29,53 +35,94 @@ export default function Page() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [openMealId, setOpenMealId] = useState<string>("");
+  // Modal state comes from URL param `meal`
+  const [openMealId, setOpenMealId] = useState(initialMeal);
   const [favoritesOpen, setFavoritesOpen] = useState(false);
 
   const { list: favorites, isFavorite, toggleFavorite } = useFavorites();
 
-  // Keep state in sync when user navigates back/forward
+  // Sync state from URL on back/forward
   useEffect(() => {
     const q = sp.get("q") ?? "";
     const c = sp.get("cat") ?? "";
+    const m = sp.get("meal") ?? "";
     setQuery(q);
     setCategory(c);
+    setOpenMealId(m);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sp]);
+
+  // Helper: open meal and write meal param into URL
+  const openMeal = (id: string) => {
+    setOpenMealId(id);
+    router.replace(
+      buildQuery({
+        q: query.trim() || undefined,
+        cat: category || undefined,
+        meal: id,
+      }),
+      { scroll: false }
+    );
+  };
+
+  // Helper: close meal and remove meal param from URL
+  const closeMeal = () => {
+    setOpenMealId("");
+    router.replace(
+      buildQuery({
+        q: query.trim() || undefined,
+        cat: category || undefined,
+      }),
+      { scroll: false }
+    );
+  };
 
   // Load categories once
   useEffect(() => {
     const ac = new AbortController();
     listCategories(ac.signal)
-      .then((res) => setCategories((res.categories ?? []).map((x) => ({ strCategory: x.strCategory }))))
+      .then((res) =>
+        setCategories(
+          (res.categories ?? []).map((x) => ({ strCategory: x.strCategory }))
+        )
+      )
       .catch(() => setCategories([]));
     return () => ac.abort();
   }, []);
 
-  // Update URL when query/category changes (debounced for query)
+  // Update URL for q/cat changes (debounced) while preserving meal if open
   useEffect(() => {
     const t = setTimeout(() => {
-      router.replace(buildQuery({ q: query.trim() || undefined, cat: category || undefined }), { scroll: false });
+      router.replace(
+        buildQuery({
+          q: query.trim() || undefined,
+          cat: category || undefined,
+          meal: openMealId || undefined,
+        }),
+        { scroll: false }
+      );
     }, 250);
-    return () => clearTimeout(t);
-  }, [query, category, router]);
 
-  // Fetch meals whenever state changes
+    return () => clearTimeout(t);
+  }, [query, category, openMealId, router]);
+
+  // Fetch meals whenever query/category changes
   useEffect(() => {
     const ac = new AbortController();
     setLoading(true);
     setError(null);
 
     const run = async () => {
-      // Priority: category filter if selected; else search if query; else show empty
+      // If category selected -> filter
       if (category) {
         const r = await filterMealsByCategory(category, ac.signal);
         setMeals(r.meals ?? []);
         return;
       }
+
+      // Else if query -> search
       if (query.trim()) {
         const r = await searchMealsByName(query, ac.signal);
-        // search returns full Meal objects; map to summary shape
         const mapped =
           (r.meals ?? []).map((m) => ({
             idMeal: m.idMeal,
@@ -85,6 +132,8 @@ export default function Page() {
         setMeals(mapped);
         return;
       }
+
+      // Otherwise empty
       setMeals([]);
     };
 
@@ -115,7 +164,7 @@ export default function Page() {
       setError(null);
       const r = await randomMeal();
       const m = r.meals?.[0];
-      if (m?.idMeal) setOpenMealId(m.idMeal);
+      if (m?.idMeal) openMeal(m.idMeal);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Något gick fel");
     } finally {
@@ -146,7 +195,10 @@ export default function Page() {
         {loading && (
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
             {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="aspect-[4/5] animate-pulse rounded-3xl bg-zinc-100 dark:bg-zinc-800" />
+              <div
+                key={i}
+                className="aspect-[4/5] animate-pulse rounded-3xl bg-zinc-100 dark:bg-zinc-800"
+              />
             ))}
           </div>
         )}
@@ -161,7 +213,7 @@ export default function Page() {
           <MealGrid
             meals={meals}
             categoryLabel={category || undefined}
-            onOpen={(id) => setOpenMealId(id)}
+            onOpen={(id) => openMeal(id)}
             isFavorite={isFavorite}
             onToggleFavorite={toggleFavorite}
           />
@@ -171,7 +223,7 @@ export default function Page() {
       <MealDetailModal
         open={Boolean(openMealId)}
         mealId={openMealId}
-        onClose={() => setOpenMealId("")}
+        onClose={closeMeal}
         isFavorite={isFavorite}
         onToggleFavorite={toggleFavorite}
       />
@@ -182,7 +234,7 @@ export default function Page() {
         onClose={() => setFavoritesOpen(false)}
         onOpenMeal={(id) => {
           setFavoritesOpen(false);
-          setOpenMealId(id);
+          openMeal(id);
         }}
         onRemoveFavorite={toggleFavorite}
       />

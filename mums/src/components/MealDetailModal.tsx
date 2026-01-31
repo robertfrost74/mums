@@ -84,11 +84,49 @@ export default function MealDetailModal({
   const actionBtn =
     "rounded-2xl border border-zinc-200 bg-white px-4 py-2 text-sm shadow-sm transition-colors duration-150 hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:bg-zinc-800";
 
+  const onShare = async () => {
+    if (!meal) return;
+
+    // Preserve existing q/cat and ensure meal is present
+    const params = new URLSearchParams(window.location.search);
+    params.set("meal", meal.idMeal);
+
+    const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+
+    // Prefer native share if available (mobile UX)
+    try {
+      // @ts-expect-error - share exists in supported browsers
+      if (navigator.share) {
+        // @ts-expect-error - share exists in supported browsers
+        await navigator.share({ title: meal.strMeal, url });
+        return;
+      }
+    } catch {
+      // ignore and fallback to clipboard
+    }
+
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      window.prompt("Kopiera länken:", url);
+    }
+  };
+
   return (
     <AnimatePresence>
       {open && (
-        <motion.div className="fixed inset-0 z-50" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-          <button className="absolute inset-0 bg-black/40" onClick={onClose} aria-label="Close meal" type="button" />
+        <motion.div
+          className="fixed inset-0 z-50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <button
+            className="absolute inset-0 bg-black/40"
+            onClick={onClose}
+            aria-label="Close meal"
+            type="button"
+          />
 
           <div className="fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2">
             <motion.div
@@ -128,7 +166,13 @@ export default function MealDetailModal({
                   <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <div className="space-y-3">
                       <div className="relative aspect-[16/11] overflow-hidden rounded-2xl">
-                        <Image src={meal.strMealThumb} alt={meal.strMeal} fill className="object-cover" sizes="(max-width: 768px) 100vw, 45vw" />
+                        <Image
+                          src={meal.strMealThumb}
+                          alt={meal.strMeal}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, 45vw"
+                        />
                       </div>
 
                       <div className="flex flex-wrap items-center gap-2">
@@ -153,23 +197,17 @@ export default function MealDetailModal({
                           {fav ? "★ Favorit" : "☆ Spara favorit"}
                         </button>
 
-                        <button
-                          onClick={async () => {
-                            const url = window.location.href;
-                            try {
-                              await navigator.clipboard.writeText(url);
-                            } catch {
-                              window.prompt("Kopiera länken:", url);
-                            }
-                          }}
-                          className={actionBtn}
-                          type="button"
-                        >
+                        <button onClick={onShare} className={actionBtn} type="button">
                           🔗 Dela
                         </button>
 
                         {meal.strYoutube && (
-                          <a href={meal.strYoutube} target="_blank" rel="noreferrer" className={actionBtn}>
+                          <a
+                            href={meal.strYoutube}
+                            target="_blank"
+                            rel="noreferrer"
+                            className={actionBtn}
+                          >
                             ▶️ YouTube
                           </a>
                         )}
@@ -200,8 +238,7 @@ export default function MealDetailModal({
                         </button>
                       </div>
 
-                      {/* Fixed-height area avoids jump */}
-                      <div className="min-h-[280px] max-h-[280px] md:min-h-[420px] md:max-h-[420px] overflow-y-auto rounded-2xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
+                      <div className="min-h-[280px] max-h-[280px] overflow-y-auto rounded-2xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900 md:min-h-[420px] md:max-h-[420px]">
                         <AnimatePresence mode="wait" initial={false}>
                           {tab === "ingredients" ? (
                             <motion.div
@@ -248,7 +285,12 @@ export default function MealDetailModal({
                               {meal.strSource && (
                                 <div className="mt-4 text-xs text-zinc-500 dark:text-zinc-400">
                                   Källa:{" "}
-                                  <a href={meal.strSource} target="_blank" rel="noreferrer" className="underline underline-offset-2">
+                                  <a
+                                    href={meal.strSource}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="underline underline-offset-2"
+                                  >
                                     {meal.strSource}
                                   </a>
                                 </div>
