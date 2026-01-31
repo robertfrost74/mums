@@ -28,7 +28,6 @@ export default function MealDetailModal({
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
-
   const favPayload = useMemo<FavoriteMeal | null>(() => {
     if (!meal) return null;
     return { idMeal: meal.idMeal, strMeal: meal.strMeal, strMealThumb: meal.strMealThumb };
@@ -89,26 +88,23 @@ export default function MealDetailModal({
   const onShare = async () => {
     if (!meal) return;
 
-    // Preserve existing q/cat and ensure meal is present
     const params = new URLSearchParams(window.location.search);
     params.set("meal", meal.idMeal);
 
     const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
 
-    // Prefer native share if available (mobile UX)
     try {
-      // @ts-expect-error - share exists in supported browsers
       if (navigator.share) {
-        // @ts-expect-error - share exists in supported browsers
         await navigator.share({ title: meal.strMeal, url });
         return;
       }
     } catch {
-      // ignore and fallback to clipboard
     }
 
     try {
       await navigator.clipboard.writeText(url);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
     } catch {
       window.prompt("Kopiera länken:", url);
     }
@@ -140,7 +136,8 @@ export default function MealDetailModal({
               role="dialog"
               aria-modal="true"
             >
-              <div className="flex items-center justify-end border-b border-zinc-200 p-4 dark:border-zinc-800">
+              <div className="flex items-center justify-between border-b border-zinc-200 p-4 dark:border-zinc-800">
+                <div className="text-base font-semibold tracking-tight">Recept</div>
                 <button onClick={onClose} className={actionBtn} type="button">
                   Stäng
                 </button>
@@ -226,14 +223,18 @@ export default function MealDetailModal({
                         <button
                           type="button"
                           onClick={() => setTab("ingredients")}
-                          className={[tabBtn, tab === "ingredients" ? tabActive : tabInactive].join(" ")}
+                          className={[tabBtn, tab === "ingredients" ? tabActive : tabInactive].join(
+                            " "
+                          )}
                         >
                           Ingredienser
                         </button>
                         <button
                           type="button"
                           onClick={() => setTab("instructions")}
-                          className={[tabBtn, tab === "instructions" ? tabActive : tabInactive].join(" ")}
+                          className={[tabBtn, tab === "instructions" ? tabActive : tabInactive].join(
+                            " "
+                          )}
                         >
                           Instruktioner
                         </button>
@@ -263,7 +264,9 @@ export default function MealDetailModal({
                                       className="flex items-baseline justify-between gap-6 text-sm"
                                     >
                                       <span className="font-medium">{x.ingredient}</span>
-                                      <span className="text-zinc-500 dark:text-zinc-400">{x.measure}</span>
+                                      <span className="text-zinc-500 dark:text-zinc-400">
+                                        {x.measure}
+                                      </span>
                                     </li>
                                   ))
                                 )}
@@ -304,6 +307,19 @@ export default function MealDetailModal({
                   </div>
                 </div>
               )}
+
+              <AnimatePresence>
+                {copied && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 8 }}
+                    className="pointer-events-none fixed bottom-6 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-zinc-900 px-4 py-2 text-sm text-white shadow-lg dark:bg-zinc-800"
+                  >
+                    Länk kopierad ✓
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           </div>
         </motion.div>
