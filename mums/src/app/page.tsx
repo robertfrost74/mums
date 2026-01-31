@@ -52,7 +52,7 @@ export default function Page() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sp]);
 
-  // Helper: open meal and write meal param into URL
+  // Helper: open/close meal & keep URL in sync
   const openMeal = (id: string) => {
     setOpenMealId(id);
     router.replace(
@@ -65,7 +65,6 @@ export default function Page() {
     );
   };
 
-  // Helper: close meal and remove meal param from URL
   const closeMeal = () => {
     setOpenMealId("");
     router.replace(
@@ -90,7 +89,7 @@ export default function Page() {
     return () => ac.abort();
   }, []);
 
-  // Update URL for q/cat changes (debounced) while preserving meal if open
+  // Update URL for q/cat/meal changes (debounced)
   useEffect(() => {
     const t = setTimeout(() => {
       router.replace(
@@ -113,16 +112,30 @@ export default function Page() {
     setError(null);
 
     const run = async () => {
-      // If category selected -> filter
+      const q = query.trim();
+
+      // ✅ Combined mode: category + query
+      // Fetch the category list and then filter in the client
+      if (category && q) {
+        const r = await filterMealsByCategory(category, ac.signal);
+        const list = r.meals ?? [];
+        const filtered = list.filter((m) =>
+          m.strMeal.toLowerCase().includes(q.toLowerCase())
+        );
+        setMeals(filtered);
+        return;
+      }
+
+      // Only category
       if (category) {
         const r = await filterMealsByCategory(category, ac.signal);
         setMeals(r.meals ?? []);
         return;
       }
 
-      // Else if query -> search
-      if (query.trim()) {
-        const r = await searchMealsByName(query, ac.signal);
+      // Only query (full search)
+      if (q) {
+        const r = await searchMealsByName(q, ac.signal);
         const mapped =
           (r.meals ?? []).map((m) => ({
             idMeal: m.idMeal,
@@ -133,7 +146,6 @@ export default function Page() {
         return;
       }
 
-      // Otherwise empty
       setMeals([]);
     };
 
@@ -212,6 +224,7 @@ export default function Page() {
         {!loading && meals.length > 0 && (
           <MealGrid
             meals={meals}
+            // visa valt category-label om den finns
             categoryLabel={category || undefined}
             onOpen={(id) => openMeal(id)}
             isFavorite={isFavorite}
