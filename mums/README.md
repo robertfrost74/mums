@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mums 🍲
 
-## Getting Started
+Mums är en snygg one-pager för att söka och utforska recept via **TheMealDB**.  
+Du kan filtrera på kategori, öppna en detaljvy, spara favoriter som ligger kvar efter reload och få ett slumpmässigt recept.
 
-First, run the development server:
+## Köra projektet
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Öppna: http://localhost:3000
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Köra tester
+npm run test:run
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Funktioner
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Sök på receptnamn
 
-## Deploy on Vercel
+Kategori-filter (hämtas från API)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Receptkort i grid (bild, namn, kategori) + tydliga hover-states
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Detaljvy (modal) med tabs: Ingredienser / Instruktioner
+
+Favoriter (★) sparas i localStorage och finns kvar efter omladdning
+
+Random-recept (🎲)
+
+Dela recept (kopierar länk, fallback till prompt)
+
+Dark mode med sparad preferens
+
+URL-state: ?q= och ?cat= fungerar med browser back/forward
+
+
+
+## Teknikval & motivering
+
+Next.js 14 (App Router) + TypeScript
+Stabil grund med tydlig komponent-/routingmodell. TypeScript används för typade API-responses och props.
+
+Tailwind CSS (v3)
+Snabbt att iterera UI med konsekventa spacing/typografi, samt bra dark mode-stöd via class.
+
+Framer Motion
+Små, medvetna transitions (modal/panel/cards) för bättre UX utan att överdriva.
+
+Vitest + Testing Library
+Snabba tester för kärnlogik (t.ex. ingrediens-parser) och enkel UI-sanity.
+
+Struktur
+
+src/lib/ – typed TheMealDB-client + helpers (t.ex. ingredient-parser)
+
+src/hooks/ – useFavorites, useTheme, useMinimizedHeader
+
+src/components/ – Header, grid/cards, modal, favorites panel
+
+public/ – logo + favicons + site.webmanifest
+
+
+
+## API
+
+Data hämtas från TheMealDB (ingen API-nyckel krävs).
+Endpoints som används: sök, kategorier, filter per kategori, lookup per id, random.
