@@ -1,12 +1,17 @@
 {
-  "name": "Mums",
+  "name": "Mums – Familjens receptsamling",
   "short_name": "Mums",
-  "description": "Mums – sök och spara favoritrecept.",
+  "description": "Mums – familjens receptsamling. Samla och dela recept med familjen.",
+  "start_url": "/",
+  "scope": "/",
   "icons": [
-    { "src": "/web-app-manifest-192x192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/web-app-manifest-512x512.png", "sizes": "512x512", "type": "image/png" }
+    { "src": "/web-app-manifest-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/web-app-manifest-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ],
   "theme_color": "#0a0a0a",
   "background_color": "#0a0a0a",
-  "display": "standalone"
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "lang": "sv",
+  "categories": ["food", "lifestyle"]
 }

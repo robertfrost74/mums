@@ -1,71 +1,56 @@
-# Mums 🍲
+# Mums
 
-Mums är en snygg one-pager för att söka och utforska recept via **TheMealDB**.  
-Du kan filtrera på kategori, öppna en detaljvy, spara favoriter som ligger kvar efter reload och få ett slumpmässigt recept.
+Mums är en familje-receptapp där du samlar, delar och hanterar familjens recept. Appen är byggd som en PWA så att den kan installeras på telefonen och användas som en native app.
 
 ## Köra projektet
 
 ```bash
 npm install
 npm run dev
+```
 
-
-Öppna: http://localhost:3000
-
-Köra tester
-npm run test:run
-
-
+Öppna: [http://localhost:3000](http://localhost:3000)
 
 ## Funktioner
 
-Sök på receptnamn
+- Familjens receptsamling med Supabase-databas
+- Sök recept på titel
+- Filtrera på kategori
+- Slå på/av recept (aktiva/inaktiva)
+- Lägg till nya recept med ingredienser
+- Inloggning med e-post och lösenord
+- Multi-tenancy: varje familj ser bara sina egna recept
+- Dark mode med sparad preferens
+- PWA: installerbar som app med service worker
+- Responsiv design med Tailwind CSS
 
-Kategori-filter (hämtas från API)
+## Teknikstack
 
-Receptkort i grid (bild, namn, kategori) + tydliga hover-states
+- **Next.js 14** (App Router) + TypeScript
+- **Supabase** – PostgreSQL databas, autentisering, Row Level Security
+- **Tailwind CSS v3** – styling med dark mode
+- **Framer Motion** – animationer
+- **Serwist** – PWA service worker
+- **Vitest** – tester
 
-Detaljvy (modal) med tabs: Ingredienser / Instruktioner
+## Databassetup
 
-Favoriter (★) sparas i localStorage och finns kvar efter omladdning
+1. Skapa ett Supabase-projekt på [supabase.com](https://supabase.com)
+2. Kör SQL-migrationen i `supabase/migration.sql` via SQL Editor i Supabase Dashboard
+3. Kopiera `.env.local.example` och fyll i dina Supabase-credentials:
 
-Random-recept (🎲)
+```
+NEXT_PUBLIC_SUPABASE_URL=https://ditt-projekt.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=din-anon-nyckel
+SUPABASE_SERVICE_ROLE_KEY=din-service-role-nyckel
+```
 
-Dela recept (kopierar länk, fallback till prompt)
+## Projektstruktur
 
-Dark mode med sparad preferens
-
-URL-state: ?q= och ?cat= fungerar med browser back/forward
-
-
-
-## Teknikval & motivering
-
-Next.js 14 (App Router) + TypeScript
-Stabil grund med tydlig komponent-/routingmodell. TypeScript används för typade API-responses och props.
-
-Tailwind CSS (v3)
-Snabbt att iterera UI med konsekventa spacing/typografi, samt bra dark mode-stöd via class.
-
-Framer Motion
-Små, medvetna transitions (modal/panel/cards) för bättre UX utan att överdriva.
-
-Vitest + Testing Library
-Snabba tester för kärnlogik (t.ex. ingrediens-parser) och enkel UI-sanity.
-
-Struktur
-
-src/lib/ – typed TheMealDB-client + helpers (t.ex. ingredient-parser)
-
-src/hooks/ – useFavorites, useTheme, useMinimizedHeader
-
-src/components/ – Header, grid/cards, modal, favorites panel
-
-public/ – logo + favicons + site.webmanifest
-
-
-
-## API
-
-Data hämtas från TheMealDB (ingen API-nyckel krävs).
-Endpoints som används: sök, kategorier, filter per kategori, lookup per id, random.
+- `src/app/` – Sidor: hem, login, lägg till recept
+- `src/components/` – UI-komponenter: Header, RecipeCard, RecipeGrid, RecipeDetailModal
+- `src/lib/supabase/` – Supabase-klienter (browser, server, middleware)
+- `src/lib/` – Typer och databastyper
+- `src/hooks/` – useTheme, useMinimizedHeader
+- `src/middleware.ts` – Auth-skydd för alla routes
+- `supabase/` – Databasmigration

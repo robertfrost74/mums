@@ -1,31 +1,32 @@
-export type ApiList<T> = { meals?: T[]; categories?: T[] };
+// ── Recipe types (Supabase) ──────────────────────────────────
 
-export type Category = {
-  idCategory: string;
-  strCategory: string;
-  strCategoryThumb: string;
-  strCategoryDescription: string;
+export type Recipe = {
+  id: string;
+  family_id: string;
+  title: string;
+  description: string | null;
+  instructions: string | null;
+  category: string | null;
+  image_url: string | null;
+  source: string | null;
+  servings: number | null;
+  prep_time: number | null;
+  cook_time: number | null;
+  is_active: boolean;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
 };
 
-export type MealSummary = {
-  idMeal: string;
-  strMeal: string;
-  strMealThumb: string;
+export type RecipeIngredient = {
+  id: string;
+  recipe_id: string;
+  ingredient: string;
+  amount: string | null;
+  unit: string | null;
+  sort_order: number;
 };
 
-export type Meal = {
-  idMeal: string;
-  strMeal: string;
-  strMealThumb: string;
-  strCategory?: string;
-  strArea?: string;
-  strInstructions?: string;
-  strYoutube?: string;
-  strSource?: string;
-
-  // ingredients 1..20 + measures 1..20
-  [key: `strIngredient${number}`]: string | undefined;
-  [key: `strMeasure${number}`]: string | undefined;
+export type RecipeWithIngredients = Recipe & {
+  recipe_ingredients: RecipeIngredient[];
 };
-
-export type FavoriteMeal = Pick<Meal, "idMeal" | "strMeal" | "strMealThumb">;
