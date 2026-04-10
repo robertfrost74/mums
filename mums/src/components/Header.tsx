@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import ThemeToggle from "./ThemeToggle";
@@ -85,22 +86,24 @@ export default function Header({
           ].join(" ")}
           aria-hidden={minimized}
         >
-          <Image
-            src="/mums-logo.svg"
-            alt="Mums"
-            width={360}
-            height={90}
-            priority
-            className={`${logoSize} w-auto object-contain transition-all duration-200 dark:hidden`}
-          />
-          <Image
-            src="/mums-logo-dark.svg"
-            alt="Mums"
-            width={360}
-            height={90}
-            priority
-            className={`hidden ${logoSize} w-auto object-contain transition-all duration-200 dark:block`}
-          />
+          <Link href="/" className="contents">
+            <Image
+              src="/mums-logo.svg"
+              alt="Mums"
+              width={360}
+              height={90}
+              priority
+              className={`${logoSize} w-auto object-contain transition-all duration-200 dark:hidden`}
+            />
+            <Image
+              src="/mums-logo-dark.svg"
+              alt="Mums"
+              width={360}
+              height={90}
+              priority
+              className={`hidden ${logoSize} w-auto object-contain transition-all duration-200 dark:block`}
+            />
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 gap-2 transition-all duration-200 md:grid-cols-[1fr_auto_auto_auto_auto] md:items-center">

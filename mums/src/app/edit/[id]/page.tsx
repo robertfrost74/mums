@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import type { RecipeWithIngredients } from "@/lib/types";
 
@@ -270,20 +271,22 @@ export default function EditRecipePage() {
       <div className="min-h-dvh">
         <header className="sticky top-0 z-40 border-b border-zinc-200 bg-white/80 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/70">
           <div className="mx-auto flex max-w-3xl items-center justify-center px-4 py-3">
-            <Image
-              src="/mums-logo.svg"
-              alt="Mums"
-              width={80}
-              height={20}
-              className="h-6 w-auto dark:hidden"
-            />
-            <Image
-              src="/mums-logo-dark.svg"
-              alt="Mums"
-              width={80}
-              height={20}
-              className="hidden h-6 w-auto dark:block"
-            />
+            <Link href="/" className="flex items-center gap-3">
+              <Image
+                src="/mums-logo.svg"
+                alt="Mums"
+                width={80}
+                height={20}
+                className="h-6 w-auto dark:hidden"
+              />
+              <Image
+                src="/mums-logo-dark.svg"
+                alt="Mums"
+                width={80}
+                height={20}
+                className="hidden h-6 w-auto dark:block"
+              />
+            </Link>
           </div>
         </header>
         <main className="mx-auto max-w-3xl px-4 py-8">
@@ -310,7 +313,7 @@ export default function EditRecipePage() {
             Tillbaka
           </button>
 
-          <div className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-3">
             <Image
               src="/mums-logo.svg"
               alt="Mums"
@@ -325,7 +328,7 @@ export default function EditRecipePage() {
               height={20}
               className="hidden h-6 w-auto dark:block"
             />
-          </div>
+          </Link>
 
           <div className="w-[80px]" />
         </div>

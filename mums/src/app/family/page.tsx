@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
 type FamilyInfo = {
@@ -71,8 +72,10 @@ export default function FamilyPage() {
           <button type="button" onClick={() => router.push("/")} className={actionBtn}>
             ← Tillbaka
           </button>
-          <Image src="/mums-logo.svg" alt="Mums" width={80} height={20} className="h-6 w-auto dark:hidden" />
-          <Image src="/mums-logo-dark.svg" alt="Mums" width={80} height={20} className="hidden h-6 w-auto dark:block" />
+          <Link href="/" className="inline-flex items-center">
+            <Image src="/mums-logo.svg" alt="Mums" width={80} height={20} className="h-6 w-auto dark:hidden" />
+            <Image src="/mums-logo-dark.svg" alt="Mums" width={80} height={20} className="hidden h-6 w-auto dark:block" />
+          </Link>
           <div className="w-[80px]" />
         </div>
       </header>

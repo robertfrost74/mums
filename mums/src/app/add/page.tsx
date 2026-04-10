@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
 type IngredientRow = { ingredient: string; amount: string; unit: string };
@@ -241,7 +242,7 @@ export default function AddRecipePage() {
             Tillbaka
           </button>
 
-          <div className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-3">
             <Image
               src="/mums-logo.svg"
               alt="Mums"
@@ -256,7 +257,7 @@ export default function AddRecipePage() {
               height={20}
               className="hidden h-6 w-auto dark:block"
             />
-          </div>
+          </Link>
 
           <div className="w-[80px]" />
         </div>

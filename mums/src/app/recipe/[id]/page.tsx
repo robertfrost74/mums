@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import type { RecipeWithIngredients } from "@/lib/types";
 
@@ -41,8 +42,10 @@ export default function RecipePage() {
       <div className="min-h-dvh">
         <header className="border-b border-zinc-200 bg-white/80 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/70">
           <div className="mx-auto flex max-w-3xl items-center justify-center px-4 py-3">
-            <Image src="/mums-logo.svg" alt="Mums" width={80} height={20} className="h-6 w-auto dark:hidden" />
-            <Image src="/mums-logo-dark.svg" alt="Mums" width={80} height={20} className="hidden h-6 w-auto dark:block" />
+            <Link href="/" className="flex items-center gap-3">
+              <Image src="/mums-logo.svg" alt="Mums" width={80} height={20} className="h-6 w-auto dark:hidden" />
+              <Image src="/mums-logo-dark.svg" alt="Mums" width={80} height={20} className="hidden h-6 w-auto dark:block" />
+            </Link>
           </div>
         </header>
         <main className="mx-auto max-w-3xl px-4 py-8">
@@ -59,8 +62,10 @@ export default function RecipePage() {
   if (notFound || !recipe) {
     return (
       <div className="flex min-h-dvh flex-col items-center justify-center gap-4 px-4">
-        <Image src="/mums-logo.svg" alt="Mums" width={120} height={30} className="h-8 w-auto dark:hidden" />
-        <Image src="/mums-logo-dark.svg" alt="Mums" width={120} height={30} className="hidden h-8 w-auto dark:block" />
+        <Link href="/" className="contents">
+          <Image src="/mums-logo.svg" alt="Mums" width={120} height={30} className="h-8 w-auto dark:hidden" />
+          <Image src="/mums-logo-dark.svg" alt="Mums" width={120} height={30} className="hidden h-8 w-auto dark:block" />
+        </Link>
         <p className="text-sm text-zinc-500 dark:text-zinc-400">Receptet hittades inte eller så har du inte åtkomst.</p>
         <button
           type="button"
@@ -84,10 +89,10 @@ export default function RecipePage() {
           >
             Alla recept
           </button>
-          <div className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-3">
             <Image src="/mums-logo.svg" alt="Mums" width={80} height={20} className="h-6 w-auto dark:hidden" />
             <Image src="/mums-logo-dark.svg" alt="Mums" width={80} height={20} className="hidden h-6 w-auto dark:block" />
-          </div>
+          </Link>
           <div className="flex gap-2">
             <button
               type="button"

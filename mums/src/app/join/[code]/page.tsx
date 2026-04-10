@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
 export default function JoinFamilyPage() {
@@ -100,8 +101,10 @@ export default function JoinFamilyPage() {
     <div className="flex min-h-dvh items-center justify-center px-4">
       <div className="w-full max-w-sm space-y-6 text-center">
         <div className="flex justify-center">
-          <Image src="/mums-logo.svg" alt="Mums" width={160} height={40} priority className="h-10 w-auto dark:hidden" />
-          <Image src="/mums-logo-dark.svg" alt="Mums" width={160} height={40} priority className="hidden h-10 w-auto dark:block" />
+          <Link href="/" className="contents">
+            <Image src="/mums-logo.svg" alt="Mums" width={160} height={40} priority className="h-10 w-auto dark:hidden" />
+            <Image src="/mums-logo-dark.svg" alt="Mums" width={160} height={40} priority className="hidden h-10 w-auto dark:block" />
+          </Link>
         </div>
 
         {loading ? (
