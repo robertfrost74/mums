@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 };
 
-const themeScript = `(function(){try{var t=localStorage.getItem("mums_theme");var d=t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme:dark)").matches);document.documentElement.classList.toggle("dark",d)}catch(e){}})()`;
+const themeScript = `(function(){try{var t=localStorage.getItem("mums_theme");document.documentElement.classList.toggle("dark",t==="dark")}catch(e){}})()`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
