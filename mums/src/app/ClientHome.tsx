@@ -100,7 +100,7 @@ export default function ClientHome() {
         if (ingredientMatches && ingredientMatches.length > 0) {
           const matchedIds = new Set(ingredientMatches.map((r) => r.recipe_id));
           const existingIds = new Set(results.map((r) => r.id));
-          const missingIds = [...matchedIds].filter((id) => !existingIds.has(id));
+          const missingIds = Array.from(matchedIds).filter((id) => !existingIds.has(id));
 
           if (missingIds.length > 0) {
             let iq = supabase

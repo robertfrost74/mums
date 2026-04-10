@@ -14,8 +14,6 @@ export default function Header({
   categories,
   categoryValue,
   onCategoryChange,
-  showAll,
-  onToggleShowAll,
   onAddRecipe,
   onSignOut,
   sort,
@@ -26,8 +24,8 @@ export default function Header({
   categories: string[];
   categoryValue: string;
   onCategoryChange: (v: string) => void;
-  showAll: boolean;
-  onToggleShowAll: () => void;
+  showAll?: boolean;
+  onToggleShowAll?: () => void;
   onAddRecipe: () => void;
   onSignOut: () => void;
   sort: SortOption;
