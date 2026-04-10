@@ -168,9 +168,13 @@ export default function EditRecipePage() {
     field: keyof IngredientRow,
     value: string,
   ) => {
-    setIngredients((prev) =>
-      prev.map((row, i) => (i === idx ? { ...row, [field]: value } : row)),
-    );
+    setIngredients((prev) => {
+      const updated = prev.map((row, i) => (i === idx ? { ...row, [field]: value } : row));
+      if (field === "ingredient" && value && idx === prev.length - 1) {
+        updated.push({ ...EMPTY_ROW });
+      }
+      return updated;
+    });
   };
 
   const addRow = () => setIngredients((prev) => [...prev, { ...EMPTY_ROW }]);

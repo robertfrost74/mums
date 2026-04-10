@@ -41,8 +41,6 @@ export default function AddRecipePage() {
   const [cookTime, setCookTime] = useState("");
   const [ingredients, setIngredients] = useState<IngredientRow[]>([
     { ...EMPTY_ROW },
-    { ...EMPTY_ROW },
-    { ...EMPTY_ROW },
   ]);
   const [familyId, setFamilyId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -157,7 +155,13 @@ export default function AddRecipePage() {
   }, [supabase]);
 
   const updateIngredient = (idx: number, field: keyof IngredientRow, value: string) => {
-    setIngredients((prev) => prev.map((row, i) => (i === idx ? { ...row, [field]: value } : row)));
+    setIngredients((prev) => {
+      const updated = prev.map((row, i) => (i === idx ? { ...row, [field]: value } : row));
+      if (field === "ingredient" && value && idx === prev.length - 1) {
+        updated.push({ ...EMPTY_ROW });
+      }
+      return updated;
+    });
   };
 
   const addRow = () => setIngredients((prev) => [...prev, { ...EMPTY_ROW }]);
