@@ -142,7 +142,7 @@ async function main() {
       instructions: "1. Blanda havregryn, socker, kakao, vaniljsocker och kallt kaffe.\n2. Rör ner smält smör.\n3. Rulla bollar och rulla i kokos eller pärlsocker.\n4. Ställ kallt 30 min.",
       category: "Fika",
       servings: 20, prep_time: 15, cook_time: 0,
-      image_url: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=800",
+      image_url: "https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=800",
       ingredients: [
         { ingredient: "Havregryn", amount: "5", unit: "dl" },
         { ingredient: "Socker", amount: "2", unit: "dl" },
@@ -159,7 +159,7 @@ async function main() {
       instructions: "1. Fräs hackad lök och vitlök i olivolja.\n2. Tillsätt krossade tomater, buljong och basilika.\n3. Låt koka 15 min.\n4. Mixa slät.\n5. Smaka av med salt, peppar och en nypa socker.\n6. Servera med osttoast.",
       category: "Soppa",
       servings: 4, prep_time: 10, cook_time: 20,
-      image_url: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800",
+      image_url: "https://images.unsplash.com/photo-1620418025834-f4379baf1de9?w=800",
       ingredients: [
         { ingredient: "Krossade tomater", amount: "2", unit: "burkar" },
         { ingredient: "Lök", amount: "1", unit: "st" },
@@ -194,7 +194,7 @@ async function main() {
       instructions: "1. Värm mjölk, smält smör i den.\n2. Blanda jäst, socker, kardemumma, salt och mjöl.\n3. Knåda 10 min, jäs 40 min.\n4. Kavla ut, bred på smör-socker-kanelfyllning.\n5. Rulla ihop och skär bitar. Jäs 30 min.\n6. Pensla med ägg, strö pärlsocker. Grädda 225°C i 8–10 min.",
       category: "Fika",
       servings: 20, prep_time: 30, cook_time: 10,
-      image_url: "https://images.unsplash.com/photo-1509365390695-33aee754301f?w=800",
+      image_url: "https://images.unsplash.com/photo-1523198205441-99fac53d157f?w=800",
       ingredients: [
         { ingredient: "Vetemjöl", amount: "8", unit: "dl" },
         { ingredient: "Mjölk", amount: "2.5", unit: "dl" },
