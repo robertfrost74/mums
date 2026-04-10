@@ -36,6 +36,7 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const [familyName, setFamilyName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [demoLoading, setDemoLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -87,6 +88,22 @@ function LoginForm() {
     }
 
     setLoading(false);
+  };
+
+  const handleDemoLogin = async () => {
+    setDemoLoading(true);
+    setError(null);
+    const { error } = await supabase.auth.signInWithPassword({
+      email: "demo@mums.app",
+      password: "demo1234",
+    });
+    if (error) {
+      setError("Demo-inloggning misslyckades. Försök igen senare.");
+    } else {
+      router.push("/");
+      router.refresh();
+    }
+    setDemoLoading(false);
   };
 
   const inputCls = [
@@ -317,7 +334,29 @@ function LoginForm() {
             )}
           </form>
 
-          <p className="mt-8 text-center text-xs text-white/20">
+          <div className="mt-6 flex items-center gap-3">
+            <div className="h-px flex-1 bg-white/10" />
+            <span className="text-xs text-white/30">eller</span>
+            <div className="h-px flex-1 bg-white/10" />
+          </div>
+
+          <button
+            type="button"
+            onClick={handleDemoLogin}
+            disabled={demoLoading}
+            className={[
+              "mt-4 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white/70",
+              "transition-all duration-200 hover:bg-white/10 hover:text-white hover:border-white/20",
+              "active:scale-[0.98] disabled:opacity-50",
+            ].join(" ")}
+          >
+            {demoLoading ? "Loggar in…" : "🍳 Testa utan konto"}
+          </button>
+          <p className="mt-2 text-center text-[11px] text-white/25">
+            Utforska appen med exempelrecept
+          </p>
+
+          <p className="mt-6 text-center text-xs text-white/20">
             Mums — Laga mat med kärlek
           </p>
         </div>
